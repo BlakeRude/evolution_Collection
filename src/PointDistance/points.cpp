@@ -37,6 +37,7 @@ public:
     {
         return other.fitness < fitness;
     }
+
 public:
     void setNP(int Points)
     {
@@ -69,7 +70,7 @@ public:
             {
                 if (i != j)
                 {
-                    temp = (((r[i] * r[i]) + (r[j] * r[j])) - (2 * r[i] * r[j] * cos(((theta[i]*myPI)/180) - ((theta[j]*myPI)/180))));
+                    temp = (((r[i] * r[i]) + (r[j] * r[j])) - (2 * r[i] * r[j] * cos(((theta[i] * myPI) / 180) - ((theta[j] * myPI) / 180))));
                     if (temp < minD)
                     {
                         minD = temp;
@@ -83,27 +84,39 @@ public:
     void mutate()
     {
         double Pm = 1;
-        Pm = Pm/np;
-        for(int i=1; i<np; i++)
+        Pm = Pm / np;
+        for (int i = 1; i < np; i++)
         {
-            if(((double)rand() / (RAND_MAX + 1.)) < Pm)
+            if (((double)rand() / (RAND_MAX + 1.)) < Pm)
             {
                 double randy = randNorm(0.1);
                 r[i] += randy;
-                if(r[i] > 1.0){ r[i] = 1.0; }
-                if(r[i] < 0.0)
-                { 
-                    if(randy < 0)
+                if (r[i] > 1.0)
+                {
+                    r[i] = 1.0;
+                }
+                if (r[i] < 0.0)
+                {
+                    if (randy < 0)
                     {
-                        r[i] = r[i] + (randy*-1);
+                        r[i] = r[i] + (randy * -1);
                     }
-                    else{r[i] = r[i] + (randy);}
+                    else
+                    {
+                        r[i] = r[i] + (randy);
+                    }
                 }
 
                 randy = randNorm(10);
                 theta[i] += randy;
-                if(theta[i] > 360){ theta[i] = 360; }
-                if(theta[i] < 0){ theta[i] = 0; }
+                if (theta[i] > 360)
+                {
+                    theta[i] = 360;
+                }
+                if (theta[i] < 0)
+                {
+                    theta[i] = 0;
+                }
             }
         }
     }
@@ -168,47 +181,47 @@ int main(int argc, char *argv[])
             s = 0.0;
             newGene.mutate();
             newGene.calcFitness();
-            
+
             lambdaPop.push_back(newGene);
         }
 
-        for(int i=0; i<mu; i++)// add Genes<> to lambdapop<> (functionally making mu + lambda)
+        for (int i = 0; i < mu; i++) // add Genes<> to lambdapop<> (functionally making mu + lambda)
         {
             lambdaPop.push_back(Genes[i]);
         }
         sort(lambdaPop.begin(), lambdaPop.end());
-        
-        for(int i=0; i<mu; i++)
+
+        for (int i = 0; i < mu; i++)
         {
             Genes[i] = lambdaPop[i];
-
         }
         nGenerations++;
         lambdaPop.clear();
     }
     cout << setprecision(6) << fixed;
-    for(int i=0; i<Points; i++)
+    for (int i = 0; i < Points; i++)
     {
         cout << Genes[0].r[i];
-        cout << " " ;
-        cout << (Genes[0].theta[i]*PI)/180;
+        cout << " ";
+        cout << (Genes[0].theta[i] * PI) / 180;
         cout << "\n";
     }
-    cout << "Fitness: " << sqrt(Genes[0].fitness )<< "\n";
+    cout << "Fitness: " << sqrt(Genes[0].fitness) << "\n";
     cout << setprecision(2) << fixed;
     vector<double> sig;
-    for(int i=0; i < Points; i++)
+    for (int i = 0; i < Points; i++)
     {
-        for(int j=0; j < Points; j++)
+        for (int j = 0; j < Points; j++)
         {
-            if(i!=j){
-            sig.push_back((((Genes[0].r[i] * Genes[0].r[i]) + (Genes[0].r[j] * Genes[0].r[j])) - (2 * Genes[0].r[i] * Genes[0].r[j] * cos(((Genes[0].theta[i]*PI)/180) - ((Genes[0].theta[j]*PI)/180)))));
+            if (i != j)
+            {
+                sig.push_back((((Genes[0].r[i] * Genes[0].r[i]) + (Genes[0].r[j] * Genes[0].r[j])) - (2 * Genes[0].r[i] * Genes[0].r[j] * cos(((Genes[0].theta[i] * PI) / 180) - ((Genes[0].theta[j] * PI) / 180)))));
             }
         }
     }
     sort(sig.begin(), sig.end());
     int iterate = 0;
-    for (int i = sig.size()-1; i >= 0; i=i-2)
+    for (int i = sig.size() - 1; i >= 0; i = i - 2)
     {
         cout << "** " << iterate << " " << sqrt(sig[i]) << endl;
         iterate++;

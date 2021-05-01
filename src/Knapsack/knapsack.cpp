@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
           solutionprime[i + 1][p] = child[p];
         }
       }
-      
+
       for (int p = 0; p < k; p++)
       {
         if (solutionprime[i][p] == 0)
